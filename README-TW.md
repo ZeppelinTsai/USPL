@@ -71,3 +71,10 @@ b131ab131a@gmail.com
 
 本專案採用 [MIT License](LICENSE) 授權，歡迎自由使用、修改與發表。  
 請保留原作者署名：TSAI PEI LIN。
+
+---
+
+## 📚 技術證明文件
+
+- [技術說明與原創證明（英文版）](docs/USPL_Design_Technical_Proof_v1.1.txt)  
+- [技術說明與原創證明（中文版）](docs/USPL_Design_Technical_Proof_v1.1_TW.txt)

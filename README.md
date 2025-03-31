@@ -83,3 +83,11 @@ Email: b131ab131a@gmail.com
 
 This project is licensed under the [MIT License](LICENSE).  
 Please retain the original author attribution: TSAI PEI LIN.
+
+---
+
+## 📚 Supporting Documents
+
+- [English Technical Proof (USPL_Design_Technical_Proof_v1.1.txt)](docs/USPL_Design_Technical_Proof_v1.1.txt)
+- [中文技術證明文件（USPL_Design_Technical_Proof_v1.1_TW.txt）](docs/USPL_Design_Technical_Proof_v1.1_TW.txt)
+
