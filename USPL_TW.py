@@ -4,13 +4,13 @@ from dotenv import load_dotenv
 import os
 import re
 
-# Load environment variables from .env file
+# 載入 .env 檔案中的環境變數
 load_dotenv()
 
-# Use the API key
+# 使用 API 金鑰
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# 1. Define mock SQL data
+# 1. 定義模擬 SQL 資料
 tableA = [
     {"id": 1, "name": "Alice", "dept_id": 101},
     {"id": 2, "name": "Bob", "dept_id": 102},
@@ -22,7 +22,7 @@ tableB = [
     {"dept_id": 102, "dept_name": "Engineering"},
 ]
 
-# 2. Read column information and define database schemas
+# 2. 讀取欄位資訊並生成資料庫綱要
 tableA_columns = list(tableA[0].keys())
 tableB_columns = list(tableB[0].keys())
 
@@ -38,18 +38,18 @@ tableB_schema = {
     "foreign_keys": {},
 }
 
-# 3. Generate prompt for GPT-3.5 Turbo
+# 3. 生成 prompt 給 GPT-3.5 Turbo
 def generate_sql(question, tableA_schema, tableB_schema):
     prompt = f"""
-    You are a SQL generator.
-    Please generate a correct SQL query based on the following database schemas.
+    你是 SQL 生成器。
+    請參照以下資料庫綱要生成正確的 SQL 語法。
 
-    Schema of tableA: {tableA_schema}
-    Schema of tableB: {tableB_schema}
+    tableA 綱要: {tableA_schema}
+    tableB 綱要: {tableB_schema}
 
-    If there are primary keys, foreign keys, and reference tables, remember to use JOIN.
+    有主鍵外鍵跟參照表格的時候，請記得用 JOIN。
 
-    User question: {question}
+    用戶問題: {question}
     SQL:
     """
 
@@ -61,14 +61,16 @@ def generate_sql(question, tableA_schema, tableB_schema):
         ],
     )
 
+    
     return response.choices[0].message["content"].strip()
 
-# 4. Execute the generated SQL query on mock data
+
+# 4. 利用生成的 SQL 對模擬資料執行查詢
 def execute_sql(sql, tableA, tableB):
     conn = sqlite3.connect(":memory:")
     cursor = conn.cursor()
 
-    # Create tableA
+    # 創建 tableA
     cursor.execute(
         f"""
         CREATE TABLE tableA (
@@ -87,7 +89,7 @@ def execute_sql(sql, tableA, tableB):
             list(row.values()),
         )
 
-    # Create tableB
+    # 創建 tableB
     cursor.execute(
         f"""
         CREATE TABLE tableB (
@@ -104,13 +106,12 @@ def execute_sql(sql, tableA, tableB):
             """,
             list(row.values()),
         )
-
+    
     cursor.execute(sql)
     result = cursor.fetchall()
     conn.close()
     return result
 
-# Extract SQL from GPT response (handling format issues)
 def extract_sql_from_response(gpt_response):
     # Use regex to extract the first SQL statement (between SELECT and ;)
     match = re.search(r"(SELECT\s.+?;)", gpt_response, re.IGNORECASE | re.DOTALL)
@@ -118,14 +119,15 @@ def extract_sql_from_response(gpt_response):
         return match.group(1).strip()
     return gpt_response.strip()
 
-# 5. Send query result back to GPT to answer the user's question
+
+# 5. 將查詢結果再丟一次 GPT，回答用戶問題
 def answer_question(question, result):
     prompt = f"""
-    User question: {question}
-    Query result: {result}
+    用戶問題: {question}
+    查詢結果: {result}
 
-    Please answer the user's question based on the result above.
-    Answer:
+    請根據用戶問題和查詢結果回答用戶問題。
+    答案:
     """
 
     response = openai.ChatCompletion.create(
@@ -138,18 +140,20 @@ def answer_question(question, result):
 
     return response.choices[0].message["content"].strip()
 
-# Simulate a user question
-question = "What are the names of all employees in the Sales department?"
 
-# Generate SQL
+# main 模擬用戶問題
+question = "所有 Sales 部門的員工姓名?"
+
+# 生成 SQL
 raw_sql = generate_sql(question, tableA_schema, tableB_schema)
 sql = extract_sql_from_response(raw_sql)
-print(f"Cleaned SQL:\n{sql}")
+print(f"清洗後 SQL:\n{sql}")
 
-# Execute SQL
+
+# 執行 SQL 查詢
 result = execute_sql(sql, tableA, tableB)
-print(f"Query Result: {result}")
+print(f"查詢結果: {result}")
 
-# Answer the question
+# 回答用戶問題
 answer = answer_question(question, result)
-print(f"Answer: {answer}")
+print(f"答案: {answer}")
