@@ -1,5 +1,10 @@
 # USPL: Unified Schema Prompt Layer
 
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Made with Python](https://img.shields.io/badge/Made%20with-Python-blue)
+![OpenAI API](https://img.shields.io/badge/API-OpenAI-brightgreen)
+![Status: Original Work](https://img.shields.io/badge/Status-Original-brightgreen)
+
 ## 🔐 Originality Statement
 
 This project includes original concepts and technical design documentation.  
@@ -66,7 +71,8 @@ USPL/
 ├── README.md                                # English documentation
 ├── README-TW.md                             # Traditional Chinese documentation
 └── docs/
-    └── USPL_Design_Technical_Proof_v1.1.txt # Original technical proof document
+    ├── USPL_Design_Technical_Proof_v1.1.txt     # English proof
+    └── USPL_Design_Technical_Proof_v1.1_TW.txt  # Chinese proof
 ```
 
 ---
@@ -91,3 +97,6 @@ Please retain the original author attribution: TSAI PEI LIN.
 - [English Technical Proof (USPL_Design_Technical_Proof_v1.1.txt)](docs/USPL_Design_Technical_Proof_v1.1.txt)
 - [中文技術證明文件（USPL_Design_Technical_Proof_v1.1_TW.txt）](docs/USPL_Design_Technical_Proof_v1.1_TW.txt)
 
+---
+
+> 💡 Pro Tip: Add a **Social Preview Image** to your GitHub repo by uploading a banner in Settings → General → Social Preview. Recommended size: 1280 x 640 px (PNG or JPG).
