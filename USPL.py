@@ -60,6 +60,7 @@ def generate_sql(question, tableA_schema, tableB_schema):
         ],
     )
 
+    
     return response.choices[0].message["content"].strip()
 
 
@@ -104,11 +105,20 @@ def execute_sql(sql, tableA, tableB):
             """,
             list(row.values()),
         )
-
+    
     cursor.execute(sql)
     result = cursor.fetchall()
     conn.close()
     return result
+
+def extract_sql_from_response(gpt_response):
+    try:
+        start = gpt_response.index("{")
+        end = gpt_response.rindex("}")
+        return gpt_response[start:end+1].strip()
+    except ValueError:
+        # fallback: if no braces, return raw
+        return gpt_response.strip()
 
 
 # 5. 將查詢結果再丟一次 GPT，回答用戶問題
@@ -136,8 +146,10 @@ def answer_question(question, result):
 question = "所有 Sales 部門的員工姓名?"
 
 # 生成 SQL
-sql = generate_sql(question, tableA_schema, tableB_schema)
-print(f"生成的 SQL: {sql}")
+raw_sql = generate_sql(question, tableA_schema, tableB_schema)
+sql = extract_sql_from_response(raw_sql)
+print(f"清洗後 SQL:\n{sql}")
+
 
 # 執行 SQL 查詢
 result = execute_sql(sql, tableA, tableB)
