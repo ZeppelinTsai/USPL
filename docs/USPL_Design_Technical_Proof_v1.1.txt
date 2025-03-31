@@ -1,32 +1,32 @@
-Unified Schema Prompt Layer（USPL）設計技術說明與創作證明  
-作者：TSAI PEI LIN  
-日期：2025-04-01  
-版本：v1.1  
-狀態：原創設計記錄 / 創作證據保存用  
+Unified Schema Prompt Layer (USPL) - Technical Design Description and Originality Proof
+Author: TSAI PEI LIN
+Date: 2025-04-01
+Version: v1.1
+Status: Original Design Record / Proof of Creation
 
 —
 
-一、技術概念說明
+I. Technical Concept Overview
 
-本技術提出一種針對多資料表結構的提示優化方法，稱為 Unified Schema Prompt Layer（USPL）。
+This technology proposes a prompt optimization method for multi-table database structures, called the Unified Schema Prompt Layer (USPL).
 
-該方法將多張資料表中的欄位整合為一張「語意統一大綱表」，並於每一個欄位標示其原始來源表（source_table）、是否為外鍵（is_foreign_key）、以及若為外鍵則指向哪一表格（foreign_target_table），以便讓語言模型（如 GPT）能以「單表語意理解方式」進行多表推理與 SQL 查詢語法產生。
+The method consolidates fields from multiple tables into a unified semantic schema and annotates each field with its source table (`source_table`), whether it is a foreign key (`is_foreign_key`), and if so, the target table it refers to (`foreign_target_table`). This allows language models (e.g., GPT) to perform multi-table reasoning and SQL query generation as if processing a single-table structure.
 
-此方法的設計邏輯，解決了語言模型在處理結構化資料、多表結構、自動 JOIN 條件推理方面的困難。
-
-—
-
-二、技術重點
-
-1. 多表壓縮為單一語意綱要結構（JSON 格式）  
-2. 每個欄位標示來源表與外鍵映射關係  
-3. 去除樣本資料，只保留欄位語意與結構資訊  
-4. 符合語言模型解析習慣，提升 SQL 推論準確率  
-5. 可擴展支援任意張數資料表  
+This design addresses the difficulties language models face when dealing with structured data, multi-table joins, and automatic inference of JOIN conditions.
 
 —
 
-三、技術範例（簡略）
+II. Key Technical Highlights
+
+1. Compress multiple tables into a single unified semantic schema (JSON format)  
+2. Annotate each field with source table and foreign key mapping  
+3. Remove sample data, retain only field semantics and structure  
+4. Follows language model-friendly input style to improve SQL inference accuracy  
+5. Scalable to support any number of tables  
+
+—
+
+III. Sample Schema (Simplified)
 
 {
   "unified_schema": [
@@ -51,30 +51,30 @@ Unified Schema Prompt Layer（USPL）設計技術說明與創作證明
 
 —
 
-四、用途與技術意義
+IV. Use Cases and Technical Significance
 
-該技術可用於語言模型輔助資料庫查詢系統中，作為資料提示綱要，使模型能在 prompt 中正確理解表與表的關係並自動推論 SQL 查詢語法（包含 JOIN 條件、查詢順序與欄位匹配邏輯）。
+This technology can be used in language model-assisted database query systems as a structured prompt guide, helping the model understand inter-table relationships and automatically infer SQL query logic (including JOIN conditions, query order, and column matching rules).
 
-此方法不需任何外掛或 plugin，僅透過提示語與結構輸入即可大幅增強語言模型對結構化資料的理解與查詢生成能力。
-
-—
-
-五、創作背景與歸屬
-
-本技術為 TSAI PEI LIN 個人於非職務時間、非使用公司資源、完全基於個人研究與設計所發展。該方法未曾在任何公司專案或展示活動中應用過，並於 2025 年 4 月 1 日完成初始構想與技術設計。屬於本人獨立創作。
+It requires no plugins or external tools—just structured prompt input—to significantly enhance the model’s comprehension of structured data and its query generation capabilities.
 
 —
 
-六、創作證據保存紀錄方式
+V. Background and Ownership
 
-本文件將同步儲存於：  
-- Google Drive（具時間戳記）  
-- GitHub 私人倉庫（可做 commit 記錄）  
-- 寄送至個人信箱以保留郵件時間證明  
-
-此舉為主張本人創作事實之證明，並作為日後專利申請、商業化、授權或公開發表依據之一。
+This method was independently developed by TSAI PEI LIN during non-working hours without the use of company resources. It is the result of personal research and design. This technology has never been used in any company project or demonstration. The initial concept and design were completed on April 1, 2025, and it is solely the author's original creation.
 
 —
 
-作者：TSAI PEI LIN  
-製作時間：2025-04-01
+VI. Preservation of Proof of Creation
+
+This document is stored in the following locations:
+- Google Drive (with timestamp)
+- GitHub private repository (with commit history)
+- Sent to personal email as timestamped proof
+
+These steps serve as evidence of original authorship and may be used for future patent applications, commercialization, licensing, or public disclosures.
+
+—
+
+Author: TSAI PEI LIN
+Created: 2025-04-01

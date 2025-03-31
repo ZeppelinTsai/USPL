@@ -6,7 +6,7 @@ USPL: Unified Schema Prompt Layer
 
 本專案內含設計概念與原創技術證明文件，詳見：
 
-📄 docs/USPL_Design_Technical_Proof_v1.1.txt
+📄 docs/USPL_Design_Technical_Proof_v1.1_TW.txt
 
 該文件詳述 USPL 的技術背景、創作脈絡與應用價值，作為專利申請、學術發表與公開展示之原始創作依據。
 
