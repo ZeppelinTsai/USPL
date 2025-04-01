@@ -5,6 +5,17 @@
 ![OpenAI API](https://img.shields.io/badge/API-OpenAI-brightgreen)
 ![Status: Original Work](https://img.shields.io/badge/Status-Original-brightgreen)
 
+## 💡 Why USPL Matters
+
+Most language models today generate SQL by guessing — not by understanding. This leads to hallucinations, broken joins, and misaligned logic. USPL exists to change that.
+
+USPL (Unified Schema Prompt Layer) helps LLMs understand where the data actually lives and how different tables relate to each other.
+Rather than treating knowledge as a flat string of text, USPL acts like a librarian: it tells the model where to look, what belongs together, and why.
+
+- "GPT doesn’t need to be louder. It needs to be accurate. USPL teaches it to check the shelves before speaking."
+
+It’s a subtle but essential shift: from generating answers based on probability... to answering based on structured reality.
+
 ## 🔐 Originality Statement
 
 This project includes original concepts and technical design documentation.  
@@ -82,6 +93,11 @@ USPL/
 TSAI PEI LIN  
 April 1, 2025  
 Email: b131ab131a@gmail.com
+
+> AI has helped me make sense of complex problems over the years, from prototyping ideas to navigating real-life challenges like my father's brain cancer.  
+> That's why I built USPL: not just to make GPT stronger, but to make its reasoning clearer, more grounded, and more useful to people who depend on reliable systems.
+
+Currently seeking remote, async-first work opportunities with teams who want to use AI not only to scale answers — but to deepen understanding.
 
 ---
 
