@@ -3,6 +3,7 @@ import openai
 from dotenv import load_dotenv
 import os
 import re
+import sys
 
 # Load environment variables from .env file
 load_dotenv()
@@ -43,6 +44,7 @@ def generate_sql(question, tableA_schema, tableB_schema):
     prompt = f"""
     You are a SQL generator.
     Please generate a correct SQL query based on the following database schemas.
+    If multiple queries are needed to answer the user's question, please generate them all.
 
     Schema of tableA: {tableA_schema}
     Schema of tableB: {tableB_schema}
@@ -112,11 +114,10 @@ def execute_sql(sql, tableA, tableB):
 
 # Extract SQL from GPT response (handling format issues)
 def extract_sql_from_response(gpt_response):
-    # Use regex to extract the first SQL statement (between SELECT and ;)
-    match = re.search(r"(SELECT\s.+?;)", gpt_response, re.IGNORECASE | re.DOTALL)
-    if match:
-        return match.group(1).strip()
-    return gpt_response.strip()
+    # Use regex to extract ALL SQL statements (ending with ;)
+    matches = re.findall(r"(SELECT\s.+?;)", gpt_response, re.IGNORECASE | re.DOTALL)
+    return [sql.strip() for sql in matches]
+
 
 # 5. Send query result back to GPT to answer the user's question
 def answer_question(question, result):
@@ -138,18 +139,57 @@ def answer_question(question, result):
 
     return response.choices[0].message["content"].strip()
 
-# Simulate a user question
-question = "What are the names of all employees in the Sales department?"
 
-# Generate SQL
-raw_sql = generate_sql(question, tableA_schema, tableB_schema)
-sql = extract_sql_from_response(raw_sql)
-print(f"Cleaned SQL:\n{sql}")
+# 6. Generate Summary
+def summarize_answers(question, answers):
+    joined = "\n".join(answers)
+    prompt = f"""
+    User question: {question}
+    The following are multiple answers based on different SQL results:
 
-# Execute SQL
-result = execute_sql(sql, tableA, tableB)
-print(f"Query Result: {result}")
+    {joined}
 
-# Answer the question
-answer = answer_question(question, result)
-print(f"Answer: {answer}")
+    Please summarize and combine these into a single cohesive answer.
+    """
+
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt},
+        ],
+    )
+
+    return response.choices[0].message["content"].strip()
+        
+
+
+
+def main():
+    # Simulate a user question
+    question = sys.argv[1] if len(sys.argv) > 1 else input("Enter your question: ")
+    # question = "List the names of employees in the Sales department; also show how many employees are in each department."
+
+    # Generate SQL
+    raw_sql = generate_sql(question, tableA_schema, tableB_schema)
+    sql_list = extract_sql_from_response(raw_sql)
+
+    answers = []
+
+    if not sql_list:
+        print("❌ No valid SQL statements found.")
+    else:
+        for idx, sql in enumerate(sql_list):
+            print(f"\n[Query {idx + 1}] SQL:\n{sql}")
+            result = execute_sql(sql, tableA, tableB)
+            print(f"Query Result: {result}")
+            answer = answer_question(question, result)
+            print(f"Answer: {answer}")
+            answers.append(answer)
+
+        # Final Summary
+        summary = summarize_answers(question, answers)
+        print("\n🔎 Final Summary:\n", summary)
+
+if __name__ == "__main__":
+    main()
